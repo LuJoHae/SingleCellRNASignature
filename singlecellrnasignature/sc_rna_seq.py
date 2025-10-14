@@ -2,6 +2,8 @@ import polars as pl
 import anndata as ad
 import numpy as np
 import pandas as pd
+import scanpy as sc
+import re
 import gzip
 import shutil
 import tarfile
@@ -9,13 +11,15 @@ import tempfile
 from pathlib import Path
 from scipy.io import mmread
 from scipy.sparse import csr_matrix
+from datalair import Lair
 from singlecellrnasignature import raw_sc_rna_seq as raw
 from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature
 
 
+
 class AziziSingleCellMapDiverse2018Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.AziziSingleCellMapDiverse2018()
@@ -58,7 +62,7 @@ class AziziSingleCellMapDiverse2018Adata(DatasetscRNASeqSignature):
 
 class BeckerSinglecellAnalysesDefine2022Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.BeckerSinglecellAnalysesDefine2022()
@@ -89,7 +93,7 @@ class BeckerSinglecellAnalysesDefine2022Adata(DatasetscRNASeqSignature):
 
 class BiTumorImmuneReprogramming2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.BiTumorImmuneReprogramming2021()
@@ -109,7 +113,7 @@ class BiTumorImmuneReprogramming2021Adata(DatasetscRNASeqSignature):
 
 class BiermannDissectingTreatmentnaiveEcosystem2022Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.BiermannDissectingTreatmentnaiveEcosystem2022()
@@ -131,7 +135,7 @@ class BiermannDissectingTreatmentnaiveEcosystem2022Adata(DatasetscRNASeqSignatur
 
 class BorcherdingMappingImmuneEnvironment2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.BorcherdingMappingImmuneEnvironment2021()
@@ -166,7 +170,7 @@ class BorcherdingMappingImmuneEnvironment2021Adata(DatasetscRNASeqSignature):
 class ChengPancancerSinglecellTranscriptional2021Adata(DatasetscRNASeqSignature):
     # uuid = datalair.UUID("bf59bdb576656b93")
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
         raw_dataset = raw.ChengPancancerSinglecellTranscriptional2021()
         lair.safe_derive(raw_dataset)
@@ -191,7 +195,7 @@ class ChengPancancerSinglecellTranscriptional2021Adata(DatasetscRNASeqSignature)
 
 class DuranteSinglecellAnalysisReveals2020Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.DuranteSinglecellAnalysisReveals2020()
@@ -223,7 +227,7 @@ class DuranteSinglecellAnalysisReveals2020Adata(DatasetscRNASeqSignature):
 
 class JerbyArnonCancerCellProgram2018Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.JerbyArnonCancerCellProgram2018()
@@ -240,7 +244,7 @@ class JerbyArnonCancerCellProgram2018Adata(DatasetscRNASeqSignature):
 
 class KhaliqRefiningColorectalCancer2022Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.KhaliqRefiningColorectalCancer2022()
@@ -259,7 +263,7 @@ class KhaliqRefiningColorectalCancer2022Adata(DatasetscRNASeqSignature):
 
 class KimSinglecellRNASequencing2020Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.KimSinglecellRNASequencing2020()
@@ -280,7 +284,7 @@ class KimSinglecellRNASequencing2020Adata(DatasetscRNASeqSignature):
 
 class KrishnaSinglecellSequencingLinks2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.KrishnaSinglecellSequencingLinks2021()
@@ -295,7 +299,7 @@ class KrishnaSinglecellSequencingLinks2021Adata(DatasetscRNASeqSignature):
 
 class LeaderSinglecellAnalysisHuman2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.LeaderSinglecellAnalysisHuman2021()
@@ -332,7 +336,7 @@ class LeaderSinglecellAnalysisHuman2021Adata(DatasetscRNASeqSignature):
 
 class LuSinglecellAtlasMulticellular2022Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
         ds = raw.LuSinglecellAtlasMulticellular2022()
         lair.safe_derive(ds, overwrite=False)
@@ -361,7 +365,7 @@ class LuSinglecellAtlasMulticellular2022Adata(DatasetscRNASeqSignature):
 
 class PelkaSpatiallyOrganizedMulticellular2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.PelkaSpatiallyOrganizedMulticellular2021()
@@ -382,7 +386,7 @@ class PelkaSpatiallyOrganizedMulticellular2021Adata(DatasetscRNASeqSignature):
 
 class PuSinglecellTranscriptomicAnalysis2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.PuSinglecellTranscriptomicAnalysis2021()
@@ -416,7 +420,7 @@ class PuSinglecellTranscriptomicAnalysis2021Adata(DatasetscRNASeqSignature):
 
 class QianPancancerBlueprintHeterogeneous2020aAdata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.QianPancancerBlueprintHeterogeneous2020a()
@@ -445,7 +449,7 @@ class QianPancancerBlueprintHeterogeneous2020aAdata(DatasetscRNASeqSignature):
 
 class SharmaOncofetalReprogrammingEndothelial2020Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.SharmaOncofetalReprogrammingEndothelial2020()
@@ -471,9 +475,8 @@ class SharmaOncofetalReprogrammingEndothelial2020Adata(DatasetscRNASeqSignature)
 
 class VazquezOvarianCancerMutational2022Adata(DatasetscRNASeqSignature):
     """Ovarian cancer scRNAseq dataset """
-    uuid = datalair.UUID("85f5df12da8f95f8")
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.VazquezOvarianCancerMutational2022()
@@ -490,7 +493,7 @@ class VazquezOvarianCancerMutational2022Adata(DatasetscRNASeqSignature):
 
 class ZhangSinglecellAnalysesReveal2021Adata(DatasetscRNASeqSignature):
 
-    def derive(self, lair: datalair.Lair) -> None:
+    def derive(self, lair: Lair) -> None:
         output_dir = lair.get_path(self)
 
         ds = raw.ZhangSinglecellAnalysesReveal2021()
