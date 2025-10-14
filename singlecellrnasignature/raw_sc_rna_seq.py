@@ -1,27 +1,29 @@
 import subprocess
-from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature
-from datalair import Lair, download_supplementary_from_geo, download_files_from_arrayexpress, download_file
+from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature as _Dataset
+from datalair import (Lair as _Lair,
+                      download_supplementary_from_geo as _download_geo,
+                      download_files_from_arrayexpress as _download_ae,
+                      download_file as _download_file)
 
+class AziziSingleCellMapDiverse2018(_Dataset):
 
-class AziziSingleCellMapDiverse2018(DatasetscRNASeqSignature):
-
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE114727", output_dir)
+        _download_geo("GSE114727", output_dir)
 
 
-class BeckerSinglecellAnalysesDefine2022(DatasetscRNASeqSignature):
+class BeckerSinglecellAnalysesDefine2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE201349", output_dir)
+        _download_geo("GSE201349", output_dir)
 
 
-class BiTumorImmuneReprogramming2021(DatasetscRNASeqSignature):
+class BiTumorImmuneReprogramming2021(_Dataset):
 
     shell_command = None
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         assert self.shell_command is not None,\
             """You must first provide the shell command for download from the website of the Braod institute!
             Go to https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#/,
@@ -32,79 +34,79 @@ class BiTumorImmuneReprogramming2021(DatasetscRNASeqSignature):
         print("=== BEGIN CURL OUTPUT ===/n{}\n=== END CURL OUTPUT ===".format(result))
 
 
-class BiermannDissectingTreatmentnaiveEcosystem2022(DatasetscRNASeqSignature):
+class BiermannDissectingTreatmentnaiveEcosystem2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE200218", output_dir)
+        _download_geo("GSE200218", output_dir)
 
 
-class BorcherdingMappingImmuneEnvironment2021(DatasetscRNASeqSignature):
+class BorcherdingMappingImmuneEnvironment2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE121638", output_dir)
+        _download_geo("GSE121638", output_dir)
 
 
-class BraunProgressiveImmuneDysfunction2021(DatasetscRNASeqSignature):
+class BraunProgressiveImmuneDysfunction2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplemented("Need to request access (dbGaP: phs002252.v1.p1)!")
 
 
-class ChanSignaturesPlasticityMetastasis2021(DatasetscRNASeqSignature):
+class ChanSignaturesPlasticityMetastasis2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplemented("Need to go to HTAN Network!")
 
 
-class ChengPancancerSinglecellTranscriptional2021(DatasetscRNASeqSignature):
+class ChengPancancerSinglecellTranscriptional2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE154763", output_dir)
+        _download_geo("GSE154763", output_dir)
 
 
-class CheSinglecellAtlasLiver2021(DatasetscRNASeqSignature):
+class CheSinglecellAtlasLiver2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE178318", output_dir)
+        _download_geo("GSE178318", output_dir)
 
 
-class DuranteSinglecellAnalysisReveals2020(DatasetscRNASeqSignature):
+class DuranteSinglecellAnalysisReveals2020(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE139829", output_dir)
+        _download_geo("GSE139829", output_dir)
 
 
-class JerbyArnonCancerCellProgram2018(DatasetscRNASeqSignature):
+class JerbyArnonCancerCellProgram2018(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE115978", output_dir)
+        _download_geo("GSE115978", output_dir)
 
 
-class KhaliqRefiningColorectalCancer2022(DatasetscRNASeqSignature):
+class KhaliqRefiningColorectalCancer2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE200997", output_dir)
+        _download_geo("GSE200997", output_dir)
 
 
-class KimSinglecellRNASequencing2020(DatasetscRNASeqSignature):
+class KimSinglecellRNASequencing2020(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE131907", output_dir)
+        _download_geo("GSE131907", output_dir)
 
 
-class KrishnaSinglecellSequencingLinks2021(DatasetscRNASeqSignature):
+class KrishnaSinglecellSequencingLinks2021(_Dataset):
     """Data from SRA: SRP308561; BioProject: PRJNA705464
     https://trace.ncbi.nlm.nih.gov/Traces/?view=study&acc=SRP308561"""
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
         urls = [
             "https://sra-download.be-md.ncbi.nlm.nih.gov/vast/sra01/SRZ/000190/SRZ190804/bulk_multiregional_cohort_counts.csv",
@@ -118,167 +120,167 @@ class KrishnaSinglecellSequencingLinks2021(DatasetscRNASeqSignature):
             "https://sra-download.be-md.ncbi.nlm.nih.gov/vast/sra01/SRZ/000190/SRZ190804/File_descriptions.txt"
         ]
         for url in urls:
-            download_file(url, output_dir.joinpath(url.split("/")[-1]))
+            _download_file(url, output_dir.joinpath(url.split("/")[-1]))
 
 
-class LeaderSinglecellAnalysisHuman2021(DatasetscRNASeqSignature):
+class LeaderSinglecellAnalysisHuman2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE154826", output_dir)
+        _download_geo("GSE154826", output_dir)
 
 
-class LiLiquidBiopsybasedSinglecell2019(DatasetscRNASeqSignature):
+class LiLiquidBiopsybasedSinglecell2019(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("BioProject accession PRJNA554445")
 
 
-class LuSinglecellAtlasMulticellular2022(DatasetscRNASeqSignature):
+class LuSinglecellAtlasMulticellular2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE149614", output_dir)
+        _download_geo("GSE149614", output_dir)
 
 
-class MaynardTherapyInducedEvolutionHuman2020(DatasetscRNASeqSignature):
+class MaynardTherapyInducedEvolutionHuman2020(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplemented("BioProject accession PRJNA591860")
 
 
-class PelkaSpatiallyOrganizedMulticellular2021(DatasetscRNASeqSignature):
+class PelkaSpatiallyOrganizedMulticellular2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE178341", output_dir)
+        _download_geo("GSE178341", output_dir)
 
 
-class PomboantunesSinglecellProfilingMyeloid2021(DatasetscRNASeqSignature):
+class PomboantunesSinglecellProfilingMyeloid2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE163120", output_dir)
+        _download_geo("GSE163120", output_dir)
 
 
-class PuSinglecellTranscriptomicAnalysis2021(DatasetscRNASeqSignature):
+class PuSinglecellTranscriptomicAnalysis2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE184362", output_dir)
+        _download_geo("GSE184362", output_dir)
 
 
-class QianPancancerBlueprintHeterogeneous2020a(DatasetscRNASeqSignature):
+class QianPancancerBlueprintHeterogeneous2020a(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_files_from_arrayexpress("E-MTAB-8107", output_dir)
+        _download_ae("E-MTAB-8107", output_dir)
 
 
-class SharmaOncofetalReprogrammingEndothelial2020(DatasetscRNASeqSignature):
+class SharmaOncofetalReprogrammingEndothelial2020(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE156625", output_dir)
+        _download_geo("GSE156625", output_dir)
 
 
-class VazquezOvarianCancerMutational2022(DatasetscRNASeqSignature):
+class VazquezOvarianCancerMutational2022(_Dataset):
     """The h5 file is actually a h5ad file"""
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE180661", output_dir)
+        _download_geo("GSE180661", output_dir)
 
 
-class WuSinglecellProfilingTumor2021(DatasetscRNASeqSignature):
+class WuSinglecellProfilingTumor2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE148071", output_dir)
+        _download_geo("GSE148071", output_dir)
 
 
-class WuSinglecellSpatiallyResolved2021(DatasetscRNASeqSignature):
+class WuSinglecellSpatiallyResolved2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE176078", output_dir)
+        _download_geo("GSE176078", output_dir)
 
 
-class XuSinglecellRNASequencing2021(DatasetscRNASeqSignature):
+class XuSinglecellRNASequencing2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE180286", output_dir)
+        _download_geo("GSE180286", output_dir)
 
 
-class ZhangLongitudinalSinglecellRNAseq2022(DatasetscRNASeqSignature):
+class ZhangLongitudinalSinglecellRNAseq2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE165897", output_dir)
+        _download_geo("GSE165897", output_dir)
 
 
-class ZhangDissectingEsophagealSquamouscell2021(DatasetscRNASeqSignature):
+class ZhangDissectingEsophagealSquamouscell2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE160269", output_dir)
+        _download_geo("GSE160269", output_dir)
 
 
-class ZhangSinglecellAnalysesReveal2021(DatasetscRNASeqSignature):
+class ZhangSinglecellAnalysesReveal2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE169246", output_dir)
+        _download_geo("GSE169246", output_dir)
 
 
-class ZhengSinglecellTranscriptomicProfiling2022(DatasetscRNASeqSignature):
+class ZhengSinglecellTranscriptomicProfiling2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE161277", output_dir)
+        _download_geo("GSE161277", output_dir)
 
 
-class ZilionisSingleCellTranscriptomicsHuman2019(DatasetscRNASeqSignature):
+class ZilionisSingleCellTranscriptomicsHuman2019(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE127465", output_dir)
+        _download_geo("GSE127465", output_dir)
 
 
 ########
 
-class LiuSinglecellAtlasReveals2025(DatasetscRNASeqSignature):
+class LiuSinglecellAtlasReveals2025(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE243013", output_dir)
+        _download_geo("GSE243013", output_dir)
 
 ########
 
 
-class BanchereauMolecularDeterminantsResponse2021(DatasetscRNASeqSignature):
+class BanchereauMolecularDeterminantsResponse2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("GO to: https://ega-archive.org/studies/EGAS00001004343")
 
 
-class HugoGenomicTranscriptomicFeatures2016(DatasetscRNASeqSignature):
+class HugoGenomicTranscriptomicFeatures2016(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
-        download_supplementary_from_geo("GSE78220", output_dir)
+        _download_geo("GSE78220", output_dir)
 
 
-class KimComprehensiveMolecularCharacterization2018(DatasetscRNASeqSignature):
+class KimComprehensiveMolecularCharacterization2018(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("Go to: https://www.ebi.ac.uk/ena/browser/view/PRJEB25780")
 
 
-class LiuIntegrativeMolecularClinical2019(DatasetscRNASeqSignature):
+class LiuIntegrativeMolecularClinical2019(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError(
             """All reasonable requests for raw and analyzed data and materials will be promptly reviewed by the senior
             authors to determine whether the request is subject to any intellectual property or confidentiality
@@ -289,53 +291,53 @@ class LiuIntegrativeMolecularClinical2019(DatasetscRNASeqSignature):
             """)
 
 
-class MariathasanTGFvAttenuatesTumour2018(DatasetscRNASeqSignature):
+class MariathasanTGFvAttenuatesTumour2018(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("Go to: https://www.ebi.ac.uk/ega/studies/EGAS00001002556")
 
 
-class McdermottClinicalActivityMolecular2018(DatasetscRNASeqSignature):
+class McdermottClinicalActivityMolecular2018(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("Go to: https://www.ebi.ac.uk/ega/search/site/EGAS00001002928 and for clinical data to: https://clinicalstudydatarequest.com/")
 
 
-class MiaoGenomicCorrelatesResponse2018(DatasetscRNASeqSignature):
+class MiaoGenomicCorrelatesResponse2018(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("Go to: https://www.science.org/doi/full/10.1126/science.aan5951")
 
 
-class PatilIntratumoralPlasmaCells2022(DatasetscRNASeqSignature):
+class PatilIntratumoralPlasmaCells2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError("""Raw and processed transcriptomic data, relevant mutation status, and limited clinical
         data has been deposited at the European Genome-phenome Archive (EGA), which is hosted by the EBI and the CRG,
         under accession number EGA: EGAS00001005013. Additional clinical data is available via request from
         vivli.org.""")
 
 
-class RiazTumorMicroenvironmentEvolution2017(DatasetscRNASeqSignature):
+class RiazTumorMicroenvironmentEvolution2017(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplemented("""Raw and processed transcriptomic data, relevant mutation status, and limited clinical
         data has been deposited at the European Genome-phenome Archive (EGA), which is hosted by the EBI and the CRG,
         under accession number EGA: EGAS00001005013. Additional clinical data is available via request from
         vivli.org.""")
 
 
-class VanallenGenomicCorrelatesResponse2015(DatasetscRNASeqSignature):
+class VanallenGenomicCorrelatesResponse2015(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         NotImplementedError(
             """No automatic download possible! Go to https://www.science.org/doi/full/10.1126/science.aan5951 and
             downloa dthe supplementary materials manually""")
 
 
-class LiMappingSinglecellTranscriptomes2022(DatasetscRNASeqSignature):
+class LiMappingSinglecellTranscriptomes2022(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError(
             """The genome sequence data reported in this paper is available at the European
             Genome-Phenome Archive: EGAD00001008029 for whole-exome sequencing data, EGAD00001008030 for
@@ -344,9 +346,9 @@ class LiMappingSinglecellTranscriptomes2022(DatasetscRNASeqSignature):
             in Mendeley Data: https://doi.org/10.17632/g67bkbnhhg.1.""")
 
 
-class BassezSinglecellMapIntratumoral2021(DatasetscRNASeqSignature):
+class BassezSinglecellMapIntratumoral2021(_Dataset):
 
-    def derive(self, lair: Lair) -> None:
+    def derive(self, lair: _Lair) -> None:
         raise NotImplementedError(
             """Raw sequencing reads of all single-cell experiments (scRNA-seq, scTCR-seq and CITE-seq) have been
             deposited in the European Genome-phenome Archive (EGA) under study no. EGAS00001004809 (with a summary of
