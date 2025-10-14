@@ -46,7 +46,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adatas.append(adata)
 
             for mtx_file in mtx_files:
-                data = _mmread(mtx_file).T
+                data = _mmread(mtx_file).T.tocsr()
                 metadata = mtx_file.name.split("_")[:3]
                 barcodes = pd.read_csv(mtx_file.joinpath("..", "_".join(metadata[:3] + ["barcodes.tsv.gz"])).resolve(), sep="\t", header=None)[0]
                 genes = pd.read_csv(mtx_file.joinpath("..", "_".join(metadata[:3] + ["genes.tsv.gz"])).resolve(), sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"}).set_index("ensembl_id")
@@ -77,7 +77,7 @@ class BeckerSinglecellAnalysesDefine2022Adata(_Dataset):
             prefixes = {"_".join(file.name.split("_")[:-1]) for file in files}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz")).T
+                data = _mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz")).T.tocsr()
                 barcodes = pd.read_csv(extract_dir.joinpath(prefix+"_barcodes.tsv.gz"), header=None, sep="\t")[0]
                 features = (pd.read_csv(extract_dir.joinpath(prefix+"_features.tsv.gz"), header=None, sep="\t")
                             .rename(columns={0: "ensembl_id", 1: "gene_name", 2: "gene_type"})
