@@ -13,7 +13,7 @@ from pathlib import Path as _Path
 from scipy.io import mmread as _mmread
 from scipy.sparse import csr_matrix as _csr_matrix
 from datalair import Lair as _Lair
-from singlecellrnasignature import raw_sc_rna_seq as _raw
+from singlecellrnasignature.raw import datasets as _raw
 from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature as _Dataset
 
 
