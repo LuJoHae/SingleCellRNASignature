@@ -13,7 +13,7 @@ from pathlib import Path as _Path
 from scipy.io import mmread as _mmread
 from scipy.sparse import csr_matrix as _csr_matrix
 from datalair import Lair as _Lair
-from singlecellrnasignature.raw import _datasets as _raw
+from singlecellrnasignature import raw as _raw
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
 
 
@@ -504,3 +504,7 @@ class ZhangSinglecellAnalysesReveal2021Adata(_Dataset):
         adata.obs = pd.read_csv(filepaths["GSE169246_TNBC_RNA.barcode.tsv.gz"], header=None, sep="\t").rename(columns={0: "barcode"})
         adata.var_names = pd.read_csv(filepaths["GSE169246_TNBC_RNA.feature.tsv.gz"], header=None, sep="\t", index_col=0).index.astype(str).rename(None)
         adata.write(output_dir.joinpath("adata.h5ad"))
+
+
+# Remove symbols imported for internal use
+del pl, ad, np, pd, sc, re, gzip, shutil, tarfile, tempfile, _Path, _mmread, _csr_matrix, _Lair, _raw, _Dataset
