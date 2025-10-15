@@ -1,2 +1,2 @@
-import adata
-import raw
+import singlecellrnasignature.adata
+import singlecellrnasignature.raw
