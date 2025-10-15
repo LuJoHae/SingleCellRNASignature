@@ -1,2 +1,43 @@
-import singlecellrnasignature.adata
-import singlecellrnasignature.raw
+from singlecellrnasignature.raw import (
+    AziziSingleCellMapDiverse2018,
+    BeckerSinglecellAnalysesDefine2022,
+    BiTumorImmuneReprogramming2021,
+    BiermannDissectingTreatmentnaiveEcosystem2022,
+    BorcherdingMappingImmuneEnvironment2021,
+    ChengPancancerSinglecellTranscriptional2021,
+    DuranteSinglecellAnalysisReveals2020,
+    JerbyArnonCancerCellProgram2018,
+    KhaliqRefiningColorectalCancer2022,
+    KimSinglecellRNASequencing2020,
+    KrishnaSinglecellSequencingLinks2021,
+    LeaderSinglecellAnalysisHuman2021,
+    LuSinglecellAtlasMulticellular2022,
+    PelkaSpatiallyOrganizedMulticellular2021,
+    PuSinglecellTranscriptomicAnalysis2021,
+    QianPancancerBlueprintHeterogeneous2020a,
+    SharmaOncofetalReprogrammingEndothelial2020,
+    VazquezOvarianCancerMutational2022,
+    ZhangSinglecellAnalysesReveal2021
+)
+
+from singlecellrnasignature.adata import (
+    AziziSingleCellMapDiverse2018Adata,
+    BeckerSinglecellAnalysesDefine2022Adata,
+    BiTumorImmuneReprogramming2021Adata,
+    BiermannDissectingTreatmentnaiveEcosystem2022Adata,
+    BorcherdingMappingImmuneEnvironment2021Adata,
+    ChengPancancerSinglecellTranscriptional2021Adata,
+    DuranteSinglecellAnalysisReveals2020Adata,
+    JerbyArnonCancerCellProgram2018Adata,
+    KhaliqRefiningColorectalCancer2022Adata,
+    KimSinglecellRNASequencing2020Adata,
+    KrishnaSinglecellSequencingLinks2021Adata,
+    LeaderSinglecellAnalysisHuman2021Adata,
+    LuSinglecellAtlasMulticellular2022Adata,
+    PelkaSpatiallyOrganizedMulticellular2021Adata,
+    PuSinglecellTranscriptomicAnalysis2021Adata,
+    QianPancancerBlueprintHeterogeneous2020aAdata,
+    SharmaOncofetalReprogrammingEndothelial2020Adata,
+    VazquezOvarianCancerMutational2022Adata,
+    ZhangSinglecellAnalysesReveal2021Adata
+)
