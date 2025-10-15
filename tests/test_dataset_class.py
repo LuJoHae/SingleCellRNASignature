@@ -1,4 +1,4 @@
-from singlecellrnasignature import dataset_class
+from singlecellrnasignature import _dataset_class
 from datalair import Lair
 
 def test_dataset_class(tmp_path):

@@ -1,4 +1,4 @@
-from singlecellrnasignature.raw import (
+from singlecellrnasignature._raw import (
     AziziSingleCellMapDiverse2018,
     BeckerSinglecellAnalysesDefine2022,
     BiTumorImmuneReprogramming2021,
@@ -20,7 +20,7 @@ from singlecellrnasignature.raw import (
     ZhangSinglecellAnalysesReveal2021
 )
 
-from singlecellrnasignature.adata import (
+from singlecellrnasignature._adata import (
     AziziSingleCellMapDiverse2018Adata,
     BeckerSinglecellAnalysesDefine2022Adata,
     BiTumorImmuneReprogramming2021Adata,

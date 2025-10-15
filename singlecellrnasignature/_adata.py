@@ -13,8 +13,8 @@ from pathlib import Path as _Path
 from scipy.io import mmread as _mmread
 from scipy.sparse import csr_matrix as _csr_matrix
 from datalair import Lair as _Lair
-from singlecellrnasignature import raw as _raw
-from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature as _Dataset
+from singlecellrnasignature import _raw as _raw
+from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
 
 
 class AziziSingleCellMapDiverse2018Adata(_Dataset):

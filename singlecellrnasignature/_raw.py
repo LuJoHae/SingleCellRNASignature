@@ -1,5 +1,5 @@
 import subprocess
-from singlecellrnasignature.dataset_class import DatasetscRNASeqSignature as _Dataset
+from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
 from datalair import (Lair as _Lair,
                       download_supplementary_from_geo as _download_geo,
                       download_files_from_arrayexpress as _download_ae,
