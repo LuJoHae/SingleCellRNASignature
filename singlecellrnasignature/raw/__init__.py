@@ -1,4 +1,4 @@
-from datasets import (
+from singlecellrnasignature.raw.datasets import (
     AziziSingleCellMapDiverse2018,
     BeckerSinglecellAnalysesDefine2022,
     BiTumorImmuneReprogramming2021,

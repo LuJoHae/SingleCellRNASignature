@@ -1,4 +1,4 @@
-from datasets import (
+from singlecellrnasignature.adata.datasets import (
     AziziSingleCellMapDiverse2018Adata,
     BeckerSinglecellAnalysesDefine2022Adata,
     BiTumorImmuneReprogramming2021Adata,
