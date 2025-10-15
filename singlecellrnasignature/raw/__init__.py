@@ -1,0 +1,23 @@
+from singlecellrnasignature.raw._datasets import (
+    AziziSingleCellMapDiverse2018,
+    BeckerSinglecellAnalysesDefine2022,
+    BiTumorImmuneReprogramming2021,
+    BiermannDissectingTreatmentnaiveEcosystem2022,
+    BorcherdingMappingImmuneEnvironment2021,
+    ChengPancancerSinglecellTranscriptional2021,
+    DuranteSinglecellAnalysisReveals2020,
+    JerbyArnonCancerCellProgram2018,
+    KhaliqRefiningColorectalCancer2022,
+    KimSinglecellRNASequencing2020,
+    KrishnaSinglecellSequencingLinks2021,
+    LeaderSinglecellAnalysisHuman2021,
+    LuSinglecellAtlasMulticellular2022,
+    PelkaSpatiallyOrganizedMulticellular2021,
+    PuSinglecellTranscriptomicAnalysis2021,
+    QianPancancerBlueprintHeterogeneous2020a,
+    SharmaOncofetalReprogrammingEndothelial2020,
+    VazquezOvarianCancerMutational2022,
+    ZhangSinglecellAnalysesReveal2021
+)
+
+del _datasets
