@@ -1,9 +1,9 @@
-from singlecellrnasignature import _dataset_class
+from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature
 from datalair import Lair
 
 def test_dataset_class(tmp_path):
 
-    class Dataset(dataset_class.DatasetscRNASeqSignature):
+    class Dataset(DatasetscRNASeqSignature):
 
         def derive(self, lair: Lair) -> None:
             output_dir = lair.get_path(self)
