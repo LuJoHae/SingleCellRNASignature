@@ -15,9 +15,10 @@ import shutil
 import tarfile
 import tempfile
 
+from typing import List
 from pathlib import Path as _Path
 from scipy.io import mmread as _mmread
-from scipy.sparse import csr_matrix as _csr_matrix
+from scipy.sparse import csr_matrix as _csr_matrix, coo_array as _coo_array
 from datalair import Lair as _Lair
 from singlecellrnasignature import raw as _raw
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
@@ -51,11 +52,13 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adatas.append(adata)
 
             for mtx_file in mtx_files:
-                data = _mmread(mtx_file).T.tocsr()
+                data = _mmread(mtx_file)
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 metadata = mtx_file.name.split("_")[:3]
                 barcodes = pd.read_csv(mtx_file.joinpath("..", "_".join(metadata[:3] + ["barcodes.tsv.gz"])).resolve(), sep="\t", header=None)[0]
                 genes = pd.read_csv(mtx_file.joinpath("..", "_".join(metadata[:3] + ["genes.tsv.gz"])).resolve(), sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"}).set_index("ensembl_id")
-                adata = ad.AnnData(X=data, var=genes)
+                adata = ad.AnnData(X=data.T.tocsr(), var=genes)
                 adata.obs["original.barcode"] = list(barcodes)
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
                 adatas.append(adata)
@@ -82,12 +85,14 @@ class BeckerSinglecellAnalysesDefine2022Adata(_Dataset):
             prefixes = {"_".join(file.name.split("_")[:-1]) for file in files}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz")).T.tocsr()
+                data = _mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz"))
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 barcodes = pd.read_csv(extract_dir.joinpath(prefix+"_barcodes.tsv.gz"), header=None, sep="\t")[0]
                 features = (pd.read_csv(extract_dir.joinpath(prefix+"_features.tsv.gz"), header=None, sep="\t")
                             .rename(columns={0: "ensembl_id", 1: "gene_name", 2: "gene_type"})
                             .set_index("ensembl_id"))
-                adata = ad.AnnData(data)
+                adata = ad.AnnData(data.T.tocsr())
                 adata.obs_names = barcodes
                 adata.obs[["geo_id", "sample"]] = (prefix.split("_")[0], "_".join(prefix.split("_")[1:]))
                 adata.var = features
@@ -106,10 +111,12 @@ class BiTumorImmuneReprogramming2021Adata(_Dataset):
         filepaths = lair.get_dataset_filepaths(ds)
 
         dir_path = _Path(filepaths["SCP1288"].joinpath("expression", "60c76a18771a5b0ba10ea91b"))
-        data = _mmread(dir_path.joinpath("matrix.mtx")).T.tocsr()
+        data = _mmread(dir_path.joinpath("matrix.mtx"))
+        if not isinstance(data, _coo_array):
+            raise TypeError("Reading mtx file resulted not in a coo _array object!")
         barcodes = pd.read_csv(dir_path.joinpath("barcodes.tsv"), sep="\t", header=None)[0]
         genes = pd.read_csv(dir_path.joinpath("genes.tsv"), sep="\t", header=None)[0]
-        adata = ad.AnnData(data)
+        adata = ad.AnnData(data.T.tocsr())
         adata.obs_names = barcodes
         adata.var_names = genes
 
@@ -125,13 +132,14 @@ class BiermannDissectingTreatmentnaiveEcosystem2022Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = _mmread(filepaths["GSE200218_sc_sn_counts.mtx.gz"]).T.tocsr()
+        data = _mmread(filepaths["GSE200218_sc_sn_counts.mtx.gz"])
+        if not isinstance(data, _coo_array):
+            raise TypeError("Reading mtx file resulted not in a coo _array object!")
         metadata = pd.read_csv(filepaths["GSE200218_sc_sn_metadata.csv.gz"], index_col=0)
         genes = pd.read_csv(filepaths["GSE200218_sc_sn_gene_names.csv.gz"], index_col=0)
         mask = (genes.index != "1-Mar") & (genes.index != "2-Mar")
-        data = data[:, mask]
         genes = genes.loc[mask]
-        adata = ad.AnnData(data)
+        adata = ad.AnnData(data.T.tocsr()[:, mask])
         adata.obs = metadata
         adata.var = genes
 
@@ -152,17 +160,19 @@ class BorcherdingMappingImmuneEnvironment2021Adata(_Dataset):
             with tarfile.open(filepaths["GSE121638_RAW.tar"], 'r:*') as tar:  # 'r:*' auto-detects compression
                 tar.extractall(path=extract_dir)
 
-            filepaths = sorted(list(extract_dir.glob("*GSM344084*")))
-            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepaths}
+            filepath_list: List[_Path] = sorted(list(extract_dir.glob("*GSM344084*")))
+            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))).T.tocsr()
+                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = (pd.read_csv(extract_dir.joinpath("_".join([prefix, "genes.tsv.gz"])), sep="\t", header=None)
                         .rename(columns={0: "ensembl_id", 1: "gene_name"}))
                 barcodes = pd.read_csv(
                     extract_dir.joinpath("_".join([prefix, "barcodes.tsv.gz"])),
                     sep="\t", header=None)
-                adata = ad.AnnData(data)
+                adata = ad.AnnData(data.T.tocsr())
                 adata.var = genes
                 adata.var.set_index("ensembl_id", inplace=True)
                 adata.obs_names = barcodes.index
@@ -210,16 +220,18 @@ class DuranteSinglecellAnalysisReveals2020Adata(_Dataset):
             extract_dir = _Path(tmpdir)
             with tarfile.open(filepaths["GSE139829_RAW.tar"], 'r:*') as tar:  # 'r:*' auto-detects compression
                 tar.extractall(path=extract_dir)
-            filepaths = sorted(list(extract_dir.glob("*")))
-            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepaths}
+            filepath_list: List[_Path] = sorted(list(extract_dir.glob("*")))
+            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))).T.tocsr()
+                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "genes.tsv.gz"])), sep="\t",
                                     header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
                 barcodes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "barcodes.tsv.gz"])), sep="\t",
                                        header=None)
-                adata = ad.AnnData(data)
+                adata = ad.AnnData(data.T.tocsr())
                 adata.var = genes
                 adata.var.set_index("ensembl_id", inplace=True)
                 adata.obs_names = barcodes.index
@@ -276,10 +288,7 @@ class KimSinglecellRNASequencing2020Adata(_Dataset):
 
         data = pl.read_csv(filepaths["GSE131907_Lung_Cancer__raw_UMI_matrix.txt.gz"], separator="\t")
         genes = data.select("Index")
-        data = data.drop("Index")
-        data = data.to_numpy()
-        data =  _csr_matrix(data).T
-        adata = ad.AnnData(data)
+        adata = ad.AnnData(_csr_matrix(data.drop("Index").to_numpy()).T)
         adata.var_names = genes["Index"]
         adata.obs = pd.read_csv(filepaths["GSE131907_Lung_Cancer_cell_annotation.txt.gz"], sep="\t")
 
@@ -325,8 +334,10 @@ class LeaderSinglecellAnalysisHuman2021Adata(_Dataset):
                 files = sorted(list(sub_dir.iterdir()))
                 barcodes = pd.read_csv(list(filter(lambda x: "barcodes" in x.name, files))[0], sep="\t", header=None)
                 genes = pd.read_csv(list(filter(lambda x: "features" in x.name, files))[0], sep="\t", header=None)
-                data = _mmread(list(filter(lambda x: "matrix" in x.name, files))[0]).tocsr().T
-                adata = ad.AnnData(data)
+                data = _mmread(list(filter(lambda x: "matrix" in x.name, files))[0])
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
+                adata = ad.AnnData(data.tocsr().T)
                 adata.obs = barcodes
                 adata.obs["batch"] = int(sub_dir.name.split("_")[-1])
                 adata.var = genes
@@ -346,8 +357,8 @@ class LuSinglecellAtlasMulticellular2022Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tmp_dir = _Path(tmp_dir)
+        with tempfile.TemporaryDirectory() as tmp_dir_str:
+            tmp_dir = _Path(tmp_dir_str)
             count_file = tmp_dir.joinpath("count.txt")
             with gzip.open(filepaths["GSE149614_HCC.scRNAseq.S71915.count.txt.gz"], "rb") as f_in:
                 with open(count_file, "wb") as f_out:
@@ -359,9 +370,8 @@ class LuSinglecellAtlasMulticellular2022Adata(_Dataset):
                 shutil.copyfileobj(f_in, f_out)
             data = pl.read_csv(fixed_count_file, separator="\t")
             genes = data.select("gene")
-            data =  _csr_matrix(data.drop("gene").to_numpy()).T
             cell_annotations = pd.read_csv(filepaths["GSE149614_HCC.metadata.updated.txt.gz"], sep="\t").set_index("Cell")
-            adata = ad.AnnData(data)
+            adata = ad.AnnData(_csr_matrix(data.drop("gene").to_numpy()).T)
             adata.obs = cell_annotations
             adata.var_names = genes["gene"]
         adata.write(output_dir.joinpath("adata.h5ad"))
@@ -401,16 +411,18 @@ class PuSinglecellTranscriptomicAnalysis2021Adata(_Dataset):
             extract_dir = _Path(str(tmp_dir))
             with tarfile.open(filepaths["GSE184362_RAW.tar"], "r") as tar:
                 tar.extractall(extract_dir)
-            filepaths = sorted(list(extract_dir.glob("*")))
-            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepaths}
+            filepath_list: List[_Path] = sorted(list(extract_dir.glob("*")))
+            prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))).T.tocsr()
+                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
+                if not isinstance(data, _coo_array):
+                    raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "features.tsv.gz"])), sep="\t",
                                     header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
                 barcodes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "barcodes.tsv.gz"])), sep="\t",
                                        header=None)
-                adata = ad.AnnData(data)
+                adata = ad.AnnData(data.T.tocsr())
                 adata.var = genes
                 adata.var.set_index("ensembl_id", inplace=True)
                 adata.obs_names = barcodes.index
@@ -460,12 +472,18 @@ class SharmaOncofetalReprogrammingEndothelial2020Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        adata = ad.AnnData(_mmread(filepaths["GSE156625_HCCFmatrix.mtx.gz"]).T.tocsr())
+        data = _mmread(filepaths["GSE156625_HCCFmatrix.mtx.gz"])
+        if not isinstance(data, _coo_array):
+            raise TypeError("Reading mtx file resulted not in a coo _array object!")
+        adata = ad.AnnData(data.T.tocsr())
         adata.obs = pd.read_csv(filepaths["GSE156625_HCCFbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
         adata.obs["cancer_type"] = "HCCF"
         adata.var = pd.read_csv(filepaths["GSE156625_HCCFgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
 
-        bdata = ad.AnnData(_mmread(filepaths["GSE156625_HCCmatrix.mtx.gz"]).T.tocsr())
+        data = _mmread(filepaths["GSE156625_HCCmatrix.mtx.gz"])
+        if not isinstance(data, _coo_array):
+            raise TypeError("Reading mtx file resulted not in a coo _array object!")
+        bdata = ad.AnnData(data.T.tocsr())
         bdata.obs = pd.read_csv(filepaths["GSE156625_HCCbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
         adata.obs["cancer_type"] = "HCC"
         bdata.var = pd.read_csv(filepaths["GSE156625_HCCgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
@@ -504,7 +522,10 @@ class ZhangSinglecellAnalysesReveal2021Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        adata = ad.AnnData(_mmread(filepaths["GSE169246_TNBC_RNA.counts.mtx.gz"]).T.tocsr())
+        data = _mmread(filepaths["GSE169246_TNBC_RNA.counts.mtx.gz"])
+        if not isinstance(data, _coo_array):
+            raise TypeError("Reading mtx file resulted not in a coo _array object!")
+        adata = ad.AnnData(data.T.tocsr())
         adata.obs = pd.read_csv(filepaths["GSE169246_TNBC_RNA.barcode.tsv.gz"], header=None, sep="\t").rename(columns={0: "barcode"})
         adata.var_names = pd.read_csv(filepaths["GSE169246_TNBC_RNA.feature.tsv.gz"], header=None, sep="\t", index_col=0).index.astype(str).rename(None)
         adata.write(output_dir.joinpath("adata.h5ad"))

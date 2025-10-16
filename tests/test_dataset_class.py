@@ -1,7 +1,12 @@
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature
 from datalair import Lair
+from typing import TYPE_CHECKING
 
-def test_dataset_class(tmp_path):
+if TYPE_CHECKING:
+    from pathlib import Path
+
+
+def test_dataset_class(tmp_path: Path) -> None:
 
     class Dataset(DatasetscRNASeqSignature):
 

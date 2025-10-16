@@ -59,13 +59,13 @@ class BorcherdingMappingImmuneEnvironment2021(_Dataset):
 class BraunProgressiveImmuneDysfunction2021(_Dataset):
 
     def derive(self, lair: _Lair) -> None:
-        raise NotImplemented("Need to request access (dbGaP: phs002252.v1.p1)!")
+        raise NotImplementedError("Need to request access (dbGaP: phs002252.v1.p1)!")
 
 
 class ChanSignaturesPlasticityMetastasis2021(_Dataset):
 
     def derive(self, lair: _Lair) -> None:
-        raise NotImplemented("Need to go to HTAN Network!")
+        raise NotImplementedError("Need to go to HTAN Network!")
 
 
 class ChengPancancerSinglecellTranscriptional2021(_Dataset):
@@ -154,7 +154,7 @@ class LuSinglecellAtlasMulticellular2022(_Dataset):
 class MaynardTherapyInducedEvolutionHuman2020(_Dataset):
 
     def derive(self, lair: _Lair) -> None:
-        raise NotImplemented("BioProject accession PRJNA591860")
+        raise NotImplementedError("BioProject accession PRJNA591860")
 
 
 class PelkaSpatiallyOrganizedMulticellular2021(_Dataset):
@@ -329,7 +329,7 @@ class PatilIntratumoralPlasmaCells2022(_Dataset):
 class RiazTumorMicroenvironmentEvolution2017(_Dataset):
 
     def derive(self, lair: _Lair) -> None:
-        raise NotImplemented("""Raw and processed transcriptomic data, relevant mutation status, and limited clinical
+        raise NotImplementedError("""Raw and processed transcriptomic data, relevant mutation status, and limited clinical
         data has been deposited at the European Genome-phenome Archive (EGA), which is hosted by the EBI and the CRG,
         under accession number EGA: EGAS00001005013. Additional clinical data is available via request from
         vivli.org.""")

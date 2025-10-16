@@ -8,6 +8,6 @@ import datalair
 class DatasetscRNASeqSignature(datalair.Dataset):
     """Datalair Dataset class for all Datasets in this package."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize this dataset class as a datalair.Dataset class with namespace `DatasetscRNASeqSignature`."""
         super().__init__(namespace="DatasetscRNASeqSignature")
