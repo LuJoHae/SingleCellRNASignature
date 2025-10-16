@@ -1,9 +1,17 @@
+"""raw.py
+
+This module defines the single cell TNA sequencing datasets as downloaded from public repositories
+(e.g. gene expression omnibus, or arrayexpress).
+"""
+
+
 import subprocess
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
 from datalair import (Lair as _Lair,
                       download_supplementary_from_geo as _download_geo,
                       download_files_from_arrayexpress as _download_ae,
                       download_file as _download_file)
+
 
 class AziziSingleCellMapDiverse2018(_Dataset):
 

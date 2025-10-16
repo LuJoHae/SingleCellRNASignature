@@ -1,3 +1,9 @@
+"""adata.py
+
+This module defines the single cell TNA sequencing datasets from `raw.py` as anndata objects saved as hdf file
+(h5ad file suffix).
+"""
+
 import polars as pl
 import anndata as ad
 import numpy as np
@@ -38,7 +44,6 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
             adatas = []
 
             for count_file in counts_files:
-                print(count_file)
                 df = pd.read_csv(count_file, index_col=0).fillna(0)
                 adata = ad.AnnData(df)
                 metadata = count_file.name.split("_")[:3]
@@ -168,7 +173,6 @@ class BorcherdingMappingImmuneEnvironment2021Adata(_Dataset):
 
 
 class ChengPancancerSinglecellTranscriptional2021Adata(_Dataset):
-    # uuid = datalair.UUID("bf59bdb576656b93")
 
     def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
