@@ -68,7 +68,9 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adata = ad.AnnData(df)
                 metadata = count_file.name.split("_")[:3]
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
-                adata.write(output_dir.joinpath(count_file.stem))
+                filename = count_file.stem.removesuffix('.csv') + ".h5ad"
+                logger.info(f"Writing file: {filename}")
+                adata.write(output_dir.joinpath(filename))
 
             for mtx_file in mtx_files:
                 logger.info(f"Processing mtx file: {mtx_file}")
@@ -81,7 +83,9 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adata = ad.AnnData(X=data.T.tocsr(), var=genes)
                 adata.obs["original.barcode"] = list(barcodes)
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
-                adata.write(output_dir.joinpath(mtx_file.stem))
+                filename = mtx_file.stem.removesuffix('.mtx') + ".h5ad"
+                logger.info(f"Writing file: {filename}")
+                adata.write(output_dir.joinpath(filename))
 
 
 class BeckerSinglecellAnalysesDefine2022Adata(_Dataset):
