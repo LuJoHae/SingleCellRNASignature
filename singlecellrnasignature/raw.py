@@ -369,7 +369,3 @@ class BassezSinglecellMapIntratumoral2021(_Dataset):
             was used to filter tumor exome-seq data for somatic mutations and calculate tumor mutation burden.
             Raw sequencing reads of all exome and low-coverage whole-genome sequencing experiments are also provided
             under EGAS00001004809.""")
-
-
-# Remove symbols imported for internal use
-del subprocess, _Dataset, _Lair, _download_geo, _download_ae, _download_file
