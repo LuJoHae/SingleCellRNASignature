@@ -14,6 +14,7 @@ import gzip
 import shutil
 import tarfile
 import tempfile
+import logging
 
 from typing import List
 from pathlib import Path as _Path
@@ -22,6 +23,25 @@ from scipy.sparse import csr_matrix as _csr_matrix, coo_array as _coo_array
 from datalair import Lair as _Lair
 from singlecellrnasignature import raw as _raw
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
+
+
+def get_logger(name: str) -> logging.Logger:
+    """Get a logger instance for a module."""
+    logger = logging.getLogger(name)
+
+    # Only configure if not already configured
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+    return logger
+
+logger = get_logger(__name__)
 
 
 class AziziSingleCellMapDiverse2018Adata(_Dataset):
@@ -43,6 +63,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
             counts_files = list(filter(lambda x: x.name.endswith("counts.csv.gz"), extract_dir.iterdir()))
 
             for count_file in counts_files:
+                logger.info(f"Processing count file: {count_file}")
                 df = pd.read_csv(count_file, index_col=0).fillna(0)
                 adata = ad.AnnData(df)
                 metadata = count_file.name.split("_")[:3]
@@ -50,6 +71,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adata.write(output_dir.joinpath(count_file.stem))
 
             for mtx_file in mtx_files:
+                logger.info(f"Processing mtx file: {mtx_file}")
                 data = _coo_array(_mmread(mtx_file))
                 if not isinstance(data, _coo_array):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
