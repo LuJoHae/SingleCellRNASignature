@@ -65,7 +65,8 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
             for count_file in counts_files:
                 logger.info(f"Processing count file: {count_file}")
                 df = pd.read_csv(count_file, index_col=0).fillna(0)
-                adata = ad.AnnData(df)
+                data = _coo_array(df.values)
+                adata = ad.AnnData(data)
                 metadata = count_file.name.split("_")[:3]
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
                 filename = count_file.stem.removesuffix('.csv') + ".h5ad"
