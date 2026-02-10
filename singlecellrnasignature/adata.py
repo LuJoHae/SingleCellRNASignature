@@ -42,14 +42,12 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
             mtx_files = list(filter(lambda x: x.name.endswith("matrix.mtx.gz"), extract_dir.iterdir()))
             counts_files = list(filter(lambda x: x.name.endswith("counts.csv.gz"), extract_dir.iterdir()))
 
-            adatas = []
-
             for count_file in counts_files:
                 df = pd.read_csv(count_file, index_col=0).fillna(0)
                 adata = ad.AnnData(df)
                 metadata = count_file.name.split("_")[:3]
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
-                adatas.append(adata)
+                adata.write(output_dir.joinpath(count_file.stem))
 
             for mtx_file in mtx_files:
                 data = _mmread(mtx_file)
@@ -61,11 +59,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adata = ad.AnnData(X=data.T.tocsr(), var=genes)
                 adata.obs["original.barcode"] = list(barcodes)
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
-                adatas.append(adata)
-
-        adata = ad.concat(adatas, join="outer", axis=0)
-        adata.obs.reset_index(inplace=True)
-        adata.write(output_dir.joinpath("adata.h5ad"))
+                adata.write(output_dir.joinpath(mtx_file.stem))
 
 
 class BeckerSinglecellAnalysesDefine2022Adata(_Dataset):
