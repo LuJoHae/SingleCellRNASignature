@@ -50,7 +50,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
                 adata.write(output_dir.joinpath(count_file.stem))
 
             for mtx_file in mtx_files:
-                data = _mmread(mtx_file)
+                data = _coo_array(_mmread(mtx_file))
                 if not isinstance(data, _coo_array):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 metadata = mtx_file.name.split("_")[:3]
