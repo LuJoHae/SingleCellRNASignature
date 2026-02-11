@@ -436,7 +436,7 @@ class PuSinglecellTranscriptomicAnalysis2021Adata(_Dataset):
             prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
+                data = _coo_array(_mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))))
                 if not isinstance(data, _coo_array):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "features.tsv.gz"])), sep="\t",
