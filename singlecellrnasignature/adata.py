@@ -19,7 +19,7 @@ import logging
 from typing import List
 from pathlib import Path as _Path
 from scipy.io import mmread as _mmread
-from scipy.sparse import csr_matrix as _csr_matrix, coo_array as _coo_array
+from scipy.sparse import csr_matrix as _csr_matrix, coo_matrix as _coo_matrix
 from datalair import Lair as _Lair
 from singlecellrnasignature import raw as _raw
 from singlecellrnasignature._dataset_class import DatasetscRNASeqSignature as _Dataset
@@ -65,7 +65,7 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
             for count_file in counts_files:
                 logger.info(f"Processing count file: {count_file}")
                 df = pd.read_csv(count_file, index_col=0).fillna(0)
-                data = _coo_array(df.values)
+                data = _coo_matrix(df.values)
                 adata = ad.AnnData(data)
                 metadata = count_file.name.split("_")[:3]
                 adata.obs[["geo_id", "patient", "tissue"]] = metadata
@@ -75,8 +75,8 @@ class AziziSingleCellMapDiverse2018Adata(_Dataset):
 
             for mtx_file in mtx_files:
                 logger.info(f"Processing mtx file: {mtx_file}")
-                data = _coo_array(_mmread(mtx_file))
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(mtx_file))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 metadata = mtx_file.name.split("_")[:3]
                 barcodes = pd.read_csv(mtx_file.joinpath("..", "_".join(metadata[:3] + ["barcodes.tsv.gz"])).resolve(), sep="\t", header=None)[0]
@@ -106,8 +106,8 @@ class BeckerSinglecellAnalysesDefine2022Adata(_Dataset):
             prefixes = {"_".join(file.name.split("_")[:-1]) for file in files}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz"))
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(extract_dir.joinpath(prefix+"_matrix.mtx.gz")))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 barcodes = pd.read_csv(extract_dir.joinpath(prefix+"_barcodes.tsv.gz"), header=None, sep="\t")[0]
                 features = (pd.read_csv(extract_dir.joinpath(prefix+"_features.tsv.gz"), header=None, sep="\t")
@@ -132,8 +132,8 @@ class BiTumorImmuneReprogramming2021Adata(_Dataset):
         filepaths = lair.get_dataset_filepaths(ds)
 
         dir_path = _Path(filepaths["SCP1288"].joinpath("expression", "60c76a18771a5b0ba10ea91b"))
-        data = _mmread(dir_path.joinpath("matrix.mtx"))
-        if not isinstance(data, _coo_array):
+        data = _coo_matrix(_mmread(dir_path.joinpath("matrix.mtx")))
+        if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
         barcodes = pd.read_csv(dir_path.joinpath("barcodes.tsv"), sep="\t", header=None)[0]
         genes = pd.read_csv(dir_path.joinpath("genes.tsv"), sep="\t", header=None)[0]
@@ -153,8 +153,8 @@ class BiermannDissectingTreatmentnaiveEcosystem2022Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = _mmread(filepaths["GSE200218_sc_sn_counts.mtx.gz"])
-        if not isinstance(data, _coo_array):
+        data = _coo_matrix(_mmread(filepaths["GSE200218_sc_sn_counts.mtx.gz"]))
+        if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
         metadata = pd.read_csv(filepaths["GSE200218_sc_sn_metadata.csv.gz"], index_col=0)
         genes = pd.read_csv(filepaths["GSE200218_sc_sn_gene_names.csv.gz"], index_col=0)
@@ -185,8 +185,8 @@ class BorcherdingMappingImmuneEnvironment2021Adata(_Dataset):
             prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = (pd.read_csv(extract_dir.joinpath("_".join([prefix, "genes.tsv.gz"])), sep="\t", header=None)
                         .rename(columns={0: "ensembl_id", 1: "gene_name"}))
@@ -245,8 +245,8 @@ class DuranteSinglecellAnalysisReveals2020Adata(_Dataset):
             prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"])))
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "genes.tsv.gz"])), sep="\t",
                                     header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
@@ -355,8 +355,8 @@ class LeaderSinglecellAnalysisHuman2021Adata(_Dataset):
                 files = sorted(list(sub_dir.iterdir()))
                 barcodes = pd.read_csv(list(filter(lambda x: "barcodes" in x.name, files))[0], sep="\t", header=None)
                 genes = pd.read_csv(list(filter(lambda x: "features" in x.name, files))[0], sep="\t", header=None)
-                data = _mmread(list(filter(lambda x: "matrix" in x.name, files))[0])
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(list(filter(lambda x: "matrix" in x.name, files))[0]))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 adata = ad.AnnData(data.tocsr().T)
                 adata.obs = barcodes
@@ -436,8 +436,8 @@ class PuSinglecellTranscriptomicAnalysis2021Adata(_Dataset):
             prefixes = {"_".join(filepath.name.split("_")[:-1]) for filepath in filepath_list}
             adatas = []
             for prefix in prefixes:
-                data = _coo_array(_mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))))
-                if not isinstance(data, _coo_array):
+                data = _coo_matrix(_mmread(extract_dir.joinpath("_".join([prefix, "matrix.mtx.gz"]))))
+                if not isinstance(data, _coo_matrix):
                     raise TypeError("Reading mtx file resulted not in a coo _array object!")
                 genes = pd.read_csv(extract_dir.joinpath("_".join([prefix, "features.tsv.gz"])), sep="\t",
                                     header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
@@ -493,16 +493,16 @@ class SharmaOncofetalReprogrammingEndothelial2020Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = _mmread(filepaths["GSE156625_HCCFmatrix.mtx.gz"])
-        if not isinstance(data, _coo_array):
+        data = _coo_matrix(_mmread(filepaths["GSE156625_HCCFmatrix.mtx.gz"]))
+        if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
         adata = ad.AnnData(data.T.tocsr())
         adata.obs = pd.read_csv(filepaths["GSE156625_HCCFbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
         adata.obs["cancer_type"] = "HCCF"
         adata.var = pd.read_csv(filepaths["GSE156625_HCCFgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
 
-        data = _mmread(filepaths["GSE156625_HCCmatrix.mtx.gz"])
-        if not isinstance(data, _coo_array):
+        data = _coo_matrix(_mmread(filepaths["GSE156625_HCCmatrix.mtx.gz"]))
+        if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
         bdata = ad.AnnData(data.T.tocsr())
         bdata.obs = pd.read_csv(filepaths["GSE156625_HCCbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
@@ -543,8 +543,8 @@ class ZhangSinglecellAnalysesReveal2021Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = _mmread(filepaths["GSE169246_TNBC_RNA.counts.mtx.gz"])
-        if not isinstance(data, _coo_array):
+        data = _coo_matrix(_mmread(filepaths["GSE169246_TNBC_RNA.counts.mtx.gz"]))
+        if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
         adata = ad.AnnData(data.T.tocsr())
         adata.obs = pd.read_csv(filepaths["GSE169246_TNBC_RNA.barcode.tsv.gz"], header=None, sep="\t").rename(columns={0: "barcode"})
