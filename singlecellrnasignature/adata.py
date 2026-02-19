@@ -557,7 +557,7 @@ class ZhangSinglecellAnalysisReveals2022Adata(_Dataset):
     def derive(self, lair: _Lair) -> None:
         output_dir = lair.get_path(self)
 
-        ds = _raw.ZhangSinglecellAnalysesReveals2022()
+        ds = _raw.ZhangSinglecellAnalysisReveals2022()
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
         filepath = filepaths["GSE215120_RAW.tar"]
