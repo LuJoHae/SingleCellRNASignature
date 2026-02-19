@@ -550,3 +550,34 @@ class ZhangSinglecellAnalysesReveal2021Adata(_Dataset):
         adata.obs = pd.read_csv(filepaths["GSE169246_TNBC_RNA.barcode.tsv.gz"], header=None, sep="\t").rename(columns={0: "barcode"})
         adata.var_names = pd.read_csv(filepaths["GSE169246_TNBC_RNA.feature.tsv.gz"], header=None, sep="\t", index_col=0).index.astype(str).rename(None)
         adata.write(output_dir.joinpath("adata.h5ad"))
+
+
+class ZhangSinglecellAnalysisReveals2022Adata(_Dataset):
+
+    def derive(self, lair: _Lair) -> None:
+        output_dir = lair.get_path(self)
+
+        ds = _raw.ZhangSinglecellAnalysesReveals2022()
+        lair.safe_derive(ds, overwrite=False)
+        filepaths = lair.get_dataset_filepaths(ds)
+        filepath = filepaths["GSE215120_RAW.tar"]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            data_dir = _Path(tmpdir)
+
+            with tarfile.open(filepath, 'r') as tar:
+                tar.extractall(path=data_dir)
+
+            adatas = {}
+            for filepath in data_dir.iterdir():
+                adata = sc.read_10x_h5(filepath)
+                adata.var["gene_name"] = adata.var.index
+                adata.var.set_index("gene_ids", inplace=True, drop=False)
+                geo_id, patient_id = filepath.stem.split("_")[:2]
+                adata.obs[["geo_id", "patient_id"]] = [geo_id, patient_id]
+                adatas[filepath.name] = adata
+
+            adata = ad.concat(list(adatas.values()), join="outer", axis=0)
+            adata.X = _csr_matrix(adata.X, dtype=np.int64)
+
+        adata.write(output_dir.joinpath("adata.h5ad"))
