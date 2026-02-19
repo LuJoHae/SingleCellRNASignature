@@ -242,6 +242,13 @@ class ZhangSinglecellAnalysesReveal2021(_Dataset):
         _download_geo("GSE169246", output_dir)
 
 
+class ZhangSinglecellAnalysisReveals2022(_Dataset):
+
+    def derive(self, lair: _Lair) -> None:
+        output_dir = lair.get_path(self)
+        _download_geo("GSE215120", output_dir)
+
+
 class ZhengSinglecellTranscriptomicProfiling2022(_Dataset):
 
     def derive(self, lair: _Lair) -> None:
