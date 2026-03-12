@@ -369,6 +369,12 @@ class LeaderSinglecellAnalysisHuman2021Adata(_Dataset):
         adata.var.rename(columns={0: "barcode"}, inplace=True)
         adata.obs.columns = adata.obs.columns.astype(str)
         adata.var.columns = adata.var.columns.astype(str)
+        adata.obs.index = adata.obs.index.astype(str)
+        adata.var.index = adata.var.index.astype(str)
+        if adata.obs.index.name == 0:
+            adata.obs.index.name = None
+        if adata.var.index.name == 0:
+            adata.var.index.name = None
         adata.write(output_dir.joinpath("adata.h5ad"))
 
 
