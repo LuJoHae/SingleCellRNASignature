@@ -307,7 +307,7 @@ class KimSinglecellRNASequencing2020Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = pl.read_csv(filepaths["GSE131907_Lung_Cancer__raw_UMI_matrix.txt.gz"], separator="\t")
+        data = pl.read_csv(filepaths["GSE131907_Lung_Cancer_raw_UMI_matrix.txt.gz"], separator="\t")
         genes = data.select("Index")
         adata = ad.AnnData(_csr_matrix(data.drop("Index").to_numpy()).T)
         adata.var_names = genes["Index"]
