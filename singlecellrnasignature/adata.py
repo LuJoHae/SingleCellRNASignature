@@ -367,6 +367,8 @@ class LeaderSinglecellAnalysisHuman2021Adata(_Dataset):
 
         adata = ad.concat(adatas)
         adata.var.rename(columns={0: "barcode"}, inplace=True)
+        adata.obs.columns = adata.obs.columns.astype(str)
+        adata.var.columns = adata.var.columns.astype(str)
         adata.write(output_dir.joinpath("adata.h5ad"))
 
 
