@@ -501,25 +501,14 @@ class SharmaOncofetalReprogrammingEndothelial2020Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        data = _coo_matrix(_mmread(filepaths["GSE156625_HCCFmatrix.mtx.gz"]))
-        if not isinstance(data, _coo_matrix):
-            raise TypeError("Reading mtx file resulted not in a coo _array object!")
-        adata = ad.AnnData(data.T.tocsr())
-        adata.obs = pd.read_csv(filepaths["GSE156625_HCCFbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
-        adata.obs["cancer_type"] = "HCCF"
-        adata.var = pd.read_csv(filepaths["GSE156625_HCCFgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
-
         data = _coo_matrix(_mmread(filepaths["GSE156625_HCCmatrix.mtx.gz"]))
         if not isinstance(data, _coo_matrix):
             raise TypeError("Reading mtx file resulted not in a coo _array object!")
-        bdata = ad.AnnData(data.T.tocsr())
-        bdata.obs = pd.read_csv(filepaths["GSE156625_HCCbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
+        adata = ad.AnnData(data.T.tocsr())
+        adata.obs = pd.read_csv(filepaths["GSE156625_HCCbarcodes.tsv.gz"], sep="\t", header=None).rename(columns={0: "barcode"})
         adata.obs["cancer_type"] = "HCC"
-        bdata.var = pd.read_csv(filepaths["GSE156625_HCCgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
+        adata.var = pd.read_csv(filepaths["GSE156625_HCCgenes.tsv.gz"], sep="\t", header=None).rename(columns={0: "ensembl_id", 1: "gene_name"})
 
-        assert np.all(adata.var_names==bdata.var_names)
-
-        adata = ad.concat([adata, bdata], axis=1, join="outer")
         adata.var.set_index("ensembl_id", inplace=True)
         adata.write(output_dir.joinpath("adata.h5ad"))
 
