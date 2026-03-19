@@ -288,7 +288,7 @@ class KhaliqRefiningColorectalCancer2022Adata(_Dataset):
         lair.safe_derive(ds, overwrite=False)
         filepaths = lair.get_dataset_filepaths(ds)
 
-        df = pl.read_csv(filepaths["GSE200997_GEO_processed_CRC_10X__raw_UMI_count_matrix.csv.gz"])
+        df = pl.read_csv(filepaths["GSE200997_GEO_processed_CRC_10X_raw_UMI_count_matrix.csv.gz"])
         data =  _csr_matrix(df.select(df.columns[1:]).to_numpy()).T
         genes = np.ndarray.flatten(df.select("").to_numpy())
         cell_annotations = pd.read_csv(filepaths["GSE200997_GEO_processed_CRC_10X_cell_annotation.csv.gz"], index_col=0)
